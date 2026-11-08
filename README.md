@@ -132,6 +132,37 @@ api-produk-tugas-9/
 | PUT | `/products` | Memperbarui produk berdasarkan ID |
 | DELETE | `/products/:id` | Menghapus produk berdasarkan ID |
 
+
+## API Health Check
+
+API menyediakan endpoint Health Check untuk mengetahui apakah server Express sedang berjalan.
+
+### Endpoint
+
+```http
+GET /health
+```
+
+### Contoh Response
+
+```json
+{
+  "status": "ok",
+  "service": "api-produk-tugas-9",
+  "uptimeSeconds": 120,
+  "timestamp": "2026-11-09T00:00:00.000Z"
+}
+```
+
+### Keterangan Response
+
+- `status`: Status server.
+- `service`: Nama layanan API.
+- `uptimeSeconds`: Lama server berjalan dalam detik.
+- `timestamp`: Waktu ketika respons dibuat.
+
+Endpoint ini digunakan untuk memeriksa status proses server Express dan tidak melakukan pemeriksaan koneksi database.
+
 ## Format Request
 
 ### POST — Menambahkan Produk
