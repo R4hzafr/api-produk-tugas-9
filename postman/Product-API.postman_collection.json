@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Product API - Express Prisma",
-    "description": "Test cases for the ExpressJS + Prisma product API. Run the collection in order with the Collection Runner.",
+  "name": "API Produk - Tugas 9 | R4hzafr",
+  "description": "Koleksi pengujian REST API manajemen produk menggunakan Express.js, Prisma ORM, dan PostgreSQL. Berisi pengujian GET, POST, PUT, DELETE, serta validasi input.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
