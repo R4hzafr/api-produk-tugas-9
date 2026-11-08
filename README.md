@@ -1,181 +1,245 @@
-# ExpressJS Simple Product API
+# API Manajemen Produk
 
-A simple product CRUD API built with ExpressJS and Prisma ORM. Data is stored in PostgreSQL.
+REST API untuk pengelolaan data produk menggunakan Express.js, Prisma ORM, dan PostgreSQL. Aplikasi ini menyediakan operasi CRUD (Create, Read, Update, Delete) dengan validasi input pada setiap permintaan.
 
-## Requirements
+## Teknologi yang Digunakan
 
-- Node.js 18+
-- Docker (for the local PostgreSQL database)
+- Node.js
+- Express.js
+- PostgreSQL
+- Prisma ORM
+- Postman
+- Docker
 
-## Running the app
+## Sumber dan Atribusi
 
-Clone the repository and move into it:
+Proyek ini dikembangkan berdasarkan starter project [Express Product API](https://github.com/catursetyo/express_product_api). Struktur dasar dan implementasi CRUD digunakan sebagai referensi pengembangan. Konfigurasi repository, dokumentasi, serta proses pengujian pada repository ini dikelola secara terpisah.
 
-```sh
-git clone https://github.com/catursetyo/express_product_api.git
-cd express_product_api
+## Persyaratan Instalasi
+
+Pastikan perangkat sudah memiliki:
+
+- Node.js versi 18.18 atau lebih baru.
+- npm.
+- Docker Desktop.
+- Postman (untuk pengujian API).
+
+## Instalasi dan Konfigurasi
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/R4hzafr/api-produk-tugas-9.git
+cd api-produk-tugas-9
 ```
 
-Install dependencies:
+### 2. Instal Dependencies
 
-```sh
+```bash
 npm install
 ```
 
-Create the environment file:
+### 3. Konfigurasi Environment
 
-```sh
+Buat file `.env` berdasarkan template:
+
+```bash
 cp .env.example .env
 ```
 
-Start the PostgreSQL container:
+Sesuaikan `DATABASE_URL` jika konfigurasi PostgreSQL berbeda.
 
-```sh
+### 4. Menjalankan PostgreSQL
+
+Pastikan Docker Desktop sudah berjalan, kemudian:
+
+```bash
 npm run db:up
 ```
 
-Apply the migration and seed the initial data:
+### 5. Menjalankan Database Migration
 
-```sh
+```bash
 npm run db:migrate
+```
+
+### 6. Memasukkan Data Awal
+
+```bash
 npm run db:seed
 ```
 
-Start the server:
+### 7. Menjalankan Server
 
-```sh
+```bash
 npm start
 ```
 
-The server runs at http://localhost:3001 (override with the `PORT` environment variable).
+Server berjalan pada:
 
-## Project structure
+`http://localhost:3001`
 
-```
-app.js                            entry point, mounts routes and listens
-routes/productRoutes.js           endpoint definitions
-middlewares/productMiddleware.js  request validation
-controllers/getAllProducts.js     GET /products
-controllers/getProductById.js     GET /products/:id
-controllers/createProduct.js      POST /products
-controllers/updateProduct.js      PUT /products
-controllers/deleteProduct.js      DELETE /products/:id
-lib/prisma.js                     shared Prisma client
-prisma/schema.prisma              database model
-prisma/migrations/                migration history
-prisma/seed.js                    initial data (Buku, Pulpen)
-docker-compose.yml                local PostgreSQL service
-.env.example                      database connection template
-```
+Endpoint utama API:
 
-## Endpoints
+`http://localhost:3001/products`
 
-| Method | Endpoint         | Description                                 |
-| ------ | ---------------- | ------------------------------------------- |
-| GET    | `/products`      | 200, all products as an array               |
-| GET    | `/products/:id`  | 200, a single product; 404 if not found     |
-| POST   | `/products`      | 201, creates a new product                  |
-| PUT    | `/products`      | 200, updates a product by `id` in the body  |
-| DELETE | `/products/:id`  | 200, deletes a product by `id`              |
+## Struktur Proyek
 
-Details:
-
-- `GET /products` -> returns every product ordered by id.
-- `GET /products/:id` -> returns a single product. Returns `404` with
-  `{ "message": "produk tidak ditemukan" }` if the id does not exist.
-- `POST /products` -> accepts `{ "name": "...", "price": 0 }` and returns the
-  created product with status `201`.
-- `PUT /products` -> accepts `{ "id": 1, "name": "...", "price": 0 }` and returns
-  the updated product with status `200`.
-- `DELETE /products/:id` -> removes the product and returns
-  `{ "message": "produk berhasil dihapus" }`.
-
-Validation errors return `400`:
-
-| Condition                          | Message                                        |
-| ---------------------------------- | ---------------------------------------------- |
-| `name` missing or empty            | `name wajib diisi`                             |
-| `price` not an integer or below 0  | `price wajib berupa bilangan bulat minimal 0`  |
-| `id` not a positive integer        | `id tidak valid`                               |
-
-## Testing examples
-
-Start the server first, then:
-
-```sh
-# get all products
-curl -i http://localhost:3001/products
-
-# get product with id 1
-curl -i http://localhost:3001/products/1
-
-# get a product that does not exist
-curl -i http://localhost:3001/products/999
-
-# create a product
-curl -i -X POST http://localhost:3001/products \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Pensil","price":3000}'
-
-# update a product
-curl -i -X PUT http://localhost:3001/products \
-  -H "Content-Type: application/json" \
-  -d '{"id":1,"name":"Buku Tulis","price":20000}'
-
-# delete a product
-curl -i -X DELETE http://localhost:3001/products/2
+```text
+api-produk-tugas-9/
+│
+├── controllers/
+│   ├── getAllProducts.js
+│   ├── getProductById.js
+│   ├── createProduct.js
+│   ├── updateProduct.js
+│   └── deleteProduct.js
+│
+├── middlewares/
+│   └── productMiddleware.js
+│
+├── routes/
+│   └── productRoutes.js
+│
+├── lib/
+│   └── prisma.js
+│
+├── prisma/
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── seed.js
+│
+├── postman/
+│   └── Product-API.postman_collection.json
+│
+├── assets/
+├── app.js
+├── package.json
+├── package-lock.json
+├── docker-compose.yml
+├── .env.example
+├── .gitignore
+└── README.md
 ```
 
-## Testing with Postman
+## Daftar Endpoint API
 
-The ready-to-import collection is at
-`postman/Product-API.postman_collection.json`.
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/products` | Menampilkan semua produk |
+| GET | `/products/:id` | Menampilkan produk berdasarkan ID |
+| POST | `/products` | Menambahkan produk |
+| PUT | `/products` | Memperbarui produk berdasarkan ID |
+| DELETE | `/products/:id` | Menghapus produk berdasarkan ID |
 
-1. Start the database and the server:
+## Format Request
 
-   ```sh
-   npm run db:up
-   npm start
-   ```
+### POST — Menambahkan Produk
 
-2. In Postman, click **Import**, select the collection file, and open it.
-3. The collection uses the variable `baseUrl` with value
-   `http://localhost:3001`. Change it in the collection variables if your server
-   runs on another port.
-4. Open the collection, click **Run**, and use the Collection Runner.
-   Run the requests in order: `03 - POST create product` saves the new product
-   id into the `productId` variable that the following requests use.
-5. Expected result: 14 requests, 30 assertions, 0 failures.
+Endpoint:
 
-The `Success flow` folder covers GET, POST, PUT, and DELETE. The
-`Validation errors` folder covers missing name, invalid price, invalid id, and
-not-found cases.
-
-To reset the database to the seed data before running the collection:
-
-```sh
-npx prisma migrate reset --force
+```http
+POST /products
 ```
 
-You can also run the collection from the terminal:
+Body JSON:
 
-```sh
-npx newman run postman/Product-API.postman_collection.json
+```json
+{
+  "name": "Pensil",
+  "price": 3000
+}
 ```
 
-## Database
+### PUT — Memperbarui Produk
 
-Check the table before and after a request:
+Endpoint:
 
-```sh
-docker exec express_product_db psql -U postgres -d product_api \
-  -c 'SELECT * FROM "Product" ORDER BY id;'
+```http
+PUT /products
 ```
 
-## Test results
+Body JSON:
 
-![200OK](assets/200OK.png)
+```json
+{
+  "id": 1,
+  "name": "Buku Tulis",
+  "price": 20000
+}
+```
 
-![404](assets/404.png)
+### DELETE — Menghapus Produk
 
-![404lagi](assets/404lagi.png)
+Endpoint:
+
+```http
+DELETE /products/1
+```
+
+## Validasi Input
+
+API menyediakan validasi terhadap data yang dikirimkan pengguna.
+
+| Kondisi | HTTP Status | Pesan |
+|---|---|---|
+| Nama kosong | 400 | name wajib diisi |
+| Harga bukan bilangan bulat atau negatif | 400 | price wajib berupa bilangan bulat minimal 0 |
+| ID tidak valid | 400 | id tidak valid |
+| Produk tidak ditemukan | 404 | produk tidak ditemukan |
+
+## Pengujian Menggunakan Postman
+
+Pengujian dilakukan menggunakan koleksi Postman yang tersedia pada:
+
+`postman/Product-API.postman_collection.json`
+
+Langkah pengujian:
+
+1. Jalankan PostgreSQL dan server Express.
+2. Buka aplikasi Postman.
+3. Pilih menu Import.
+4. Masukkan file `Product-API.postman_collection.json`.
+5. Jalankan request GET, POST, PUT, dan DELETE.
+6. Periksa status HTTP dan respons JSON.
+7. Jalankan skenario validasi untuk memastikan input yang tidak sesuai ditolak.
+
+## Pemeriksaan Database
+
+Prisma Studio dapat digunakan untuk melihat data produk yang tersimpan.
+
+Jalankan:
+
+```bash
+npx prisma studio
+```
+
+Untuk memeriksa data melalui PostgreSQL:
+
+```bash
+docker exec express_product_db psql -U postgres -d product_api -c 'SELECT * FROM "Product" ORDER BY id;'
+```
+
+## Pengujian Persistensi Data
+
+Untuk memastikan data tersimpan secara permanen:
+
+1. Tambahkan produk melalui Postman.
+2. Hentikan server Express dengan `Ctrl + C`.
+3. Jalankan kembali menggunakan `npm start`.
+4. Lakukan GET `/products`.
+5. Pastikan produk yang sebelumnya ditambahkan masih tersedia.
+
+Data disimpan pada PostgreSQL, bukan hanya pada memori aplikasi.
+
+**Catatan:** Jangan gunakan `docker compose down -v` ketika menguji persistensi karena perintah tersebut menghapus volume database.
+
+## Keamanan Repository
+
+File `.env` tidak disertakan dalam repository karena mengandung konfigurasi koneksi database.
+
+File `.gitignore` digunakan untuk mengecualikan file environment dan folder `node_modules`.
+
+## Repository
+
+GitHub: https://github.com/R4hzafr/api-produk-tugas-9
